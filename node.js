@@ -38,6 +38,11 @@ app.get('/cerrar', (req, res) => {
   });
 });
 
+// Nueva ruta para decir "Hola desde Node" en formato JSON
+app.get('/hola', (req, res) => {
+    res.json({ mensaje: 'Hola desde Node' });
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
