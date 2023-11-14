@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const { spawn } = require("child_process");
 
 const app = express();
 
@@ -42,6 +43,45 @@ app.get('/cerrar', (req, res) => {
 app.get('/hola', (req, res) => {
     res.json({ mensaje: 'Hola desde Node' });
 });
+
+//MENSAJE DESDE PYTHON
+//Para hacer graficos instalar esto 
+
+//pip install matplotlib
+//npm install express child_process
+
+app.post("/python", (req, res) => {
+    try {
+        //PROCESO QUE EJECUTAR EL COMANDO PYTHON
+        const processoPython = spawn("py", ["index.py"]);
+
+        let resultado = '';
+
+        // Manejar la salida del script Python
+        processoPython.stdout.on("data", (data) => {
+            console.log("Resultado del script");
+            res.json({ result: data.toString() });
+            resultado += data.toString();
+        });
+
+        // Manejar errores del script Python
+        processoPython.stderr.on("data", (error) => {
+            console.log("Error en el srcipt", error.toString());
+            res.status(500).json({ error: "FALLO SRICPT" });
+        });
+
+        // Finalizar la ejecución del script Python
+        processoPython.on("close", (code) => {
+            console.log("PROCESO DE PYHTON FINALIZADO");
+            res.json({result: `${resultado}`})
+        });
+
+    } catch (error) {
+        console.error("Error en la solicitud desde Python:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
