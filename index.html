@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.io Test</title>
+    <style>
+        /* Estilo básico para las imágenes */
+        
+        img {
+            width: 300px;
+            /* Ajusta el ancho según tus necesidades */
+            height: auto;
+            /* Mantiene la proporción original */
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Socket.io Test</h1>
+    <input type="text" id="mensajeInput" placeholder="Escribe un mensaje">
+    <button onclick="enviarMensaje()">Enviar</button>
+
+    <ul id="mensajesLista"></ul>
+
+    <h1>Graficos</h1>
+    <img src="./grafico.png">
+
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js "></script>
+    <script>
+        const socket = io();
+
+        socket.on('mensaje', (data) => {
+            const mensajesLista = document.getElementById('mensajesLista');
+            const nuevoMensaje = document.createElement('li');
+            nuevoMensaje.textContent = data;
+            mensajesLista.appendChild(nuevoMensaje);
+        });
+
+        function enviarMensaje() {
+            const mensajeInput = document.getElementById('mensajeInput');
+            const mensaje = mensajeInput.value;
+
+            // Enviar el mensaje al servidor
+            socket.emit('mensajesvue', mensaje);
+
+            // Limpiar el campo de entrada
+            mensajeInput.value = '';
+        }
+    </script>
+</body>
+
+</html>

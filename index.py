@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 import json
 import os
 
 # Datos de ejemplo en formato JSON
 with open ('letras.json','r') as archivo:
-    datos = json.load(archivo)
+    datos = pd.read_json(archivo)
 
 # Crear el gráfico
 plt.bar(datos['etiquetas'], datos['valores'])
